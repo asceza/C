@@ -1,51 +1,48 @@
-/* https://www.youtube.com/shorts/pw1WY1pOAoc */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#define LENGTH 20
-#define MAX_NUMBER 70
+#define LENGTH 20 //длина массива
+#define MAX_NUMBER 70 //максимальное число в массиве
 
-int A[LENGTH] = {0};
 
-void init_array(int *A) {
-    srand(time(NULL)); // current time as a seed
+void init_array(int *array) {
+    srand(time(NULL)); //текущее время в качестве начального значения
     for (int i = 0; i < LENGTH; i++) {
-        int r = rand()%MAX_NUMBER; // random numbers between 0..(MAX_NUMBER-1)
-        A[i] = r;
+        int r = rand()%MAX_NUMBER + 1; //псевдослучайное число 0..(MAX_NUMBER-1)
+        array[i] = r;
     }
 }
 
-// add stars to each lines
-void print_stars(int c) {
-    for (int i = 0; i < c; i++) printf("*");
+//вывод в консоль звездочки одной строки
+void print_stars(int *c) {
+    for (int i = 0; i < *c; i++) printf("*");
+    printf("\n");
 }
 
-// print in reverse order
-void print_array(int *A) {
+//вывод в консоль массива в обратном порядке (по строчно)
+void print_array(int *array) {
     system("cls");
     for (int i = LENGTH - 1; i >= 0; i--) {
-        printf("%2d ", A[i]);
-        print_stars(A[i]);
-        printf("\n");
+        printf("%2d ", array[i]);
+        print_stars(&array[i]);
     }
-    usleep(100000); // pause for visual dynamics
 }
 
 
-void bubble_sort(int *A) {
-    _Bool flag = 1; // was there a change in array?
-    int max = 0; // exclude comparison with raised numbers
-    while (flag != 0) {
-        flag = 0;
+void bubble_sort(int *array) {
+    _Bool is_swap = 1; //были перестановки?
+    int max = 0; //чтобы исключить сравнение с уже поднятыми числами
+    while (is_swap != 0) {
+        is_swap = 0;
         for (int i = 0; i < LENGTH - 1 - max; i++) {
-            if (A[i] > A[i + 1]) {
-                int tmp = A[i]; // temporary buffer variable
-                A[i] = A[i + 1];
-                A[i + 1] = tmp;
-                flag = 1;
-                print_array(A);
+            if (array[i] > array[i + 1]) {
+                int tmp = array[i]; //временная переменная
+                array[i] = array[i + 1];
+                array[i + 1] = tmp;
+                is_swap = 1;
+                print_array(array);
+                usleep(100000); //пауза для визуализации
             }
         }
         max++;
@@ -54,7 +51,9 @@ void bubble_sort(int *A) {
 
 
 int main() {
-    init_array(A);
-    print_array(A);
-    bubble_sort(A);
+    int array[LENGTH] = {0};
+    init_array(array);
+    print_array(array);
+
+    bubble_sort(array);
 }
